@@ -1,0 +1,13 @@
+name: dl38
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - colorama
+  - easydict
+  - pyyaml
+  - matplotlib
+  - numpy
+  - opencv
+  - python=3.8.*
