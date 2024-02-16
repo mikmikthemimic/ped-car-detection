@@ -10,11 +10,10 @@ from dataset.image_dataset import ImageDataset
 from dataset.voc.voc_eval import voc_eval
 
 _CLASSES = ('__background__',  # always index 0
-           'aeroplane', 'bicycle', 'bird', 'boat',
-           'bottle', 'bus', 'car', 'cat', 'chair',
-           'cow', 'diningtable', 'dog', 'horse',
-           'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
+           'Enforcer',
+           'Pedestrian', 'Pedestrian-Violator',
+           'Vehicle', 'Vehicle-Violator'
+           )
 
 class PascalVoc(ImageDataset):
     def __init__(self, image_set, year, params, only_classes=False):

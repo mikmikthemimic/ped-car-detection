@@ -35,6 +35,39 @@ parser = argparse.ArgumentParser(description='Faster R-CNN Network')
 subparsers = parser.add_subparsers(dest='mode', help='main mode of network')
 formatter = argparse.ArgumentDefaultsHelpFormatter
 
+# create the parser for the k-fold mode
+parser_kfold = subparsers.add_parser('kfold', formatter_class=formatter,
+                                     help='help for KFOLD mode of network')
+add_common_parser_arguments(parser_kfold)
+parser_kfold.add_argument('-bs', '--batch_size', type=int, default=None,
+                          help='training batch size')
+parser_kfold.add_argument('-lr', '--learning_rate', type=float, default=None,
+                          help='training learning rate')
+parser_kfold.add_argument('-o', '--optimizer', choices=['sgd', 'adam'],
+                          default='sgd', help='training optimizer')
+parser_kfold.add_argument('-lrds', '--lr_decay_step', type=int, default=None,
+                          help='learning rate decay step, in epochs')
+parser_kfold.add_argument('-lrdg', '--lr_decay_gamma', type=float, default=None,
+                          help='learning rate decay ratio')
+parser_kfold.add_argument('-p', '--pretrain', action='store_true',
+                          help='load weigths from checkpoint or not '
+                          + 'Need to set SESSION and EPOCH')
+parser_kfold.add_argument('-r', '--resume', action='store_true',
+                          help='resume training from checkpoint or not '
+                          + 'Need to set SESSION and EPOCH')
+parser_kfold.add_argument('-te', '--total_epoch', type=int, default=20,
+                          help='total number of epochs for training')
+parser_kfold.add_argument('-di', '--display_interval', type=int, default=100,
+                          help='number of iterations to display')
+parser_kfold.add_argument('-sd', '--save_dir', default='models',
+                          help='directory to save models')
+parser_kfold.add_argument('--vis-off', dest='vis_off', action='store_true',
+                          help='turn off visualize training process on plotter')
+parser_kfold.add_argument('-ap', '--add_params', nargs=argparse.REMAINDER,
+                          default=[], help='additional parameters')
+parser_kfold.add_argument('-kf', '--k_folds', type=int, default=5,
+                            help='number of folds for k-fold cross validation')
+
 # create the parser for the train mode
 parser_train = subparsers.add_parser('train', formatter_class=formatter,
                                      help='help for TRAIN mode of network')
@@ -131,7 +164,16 @@ if __name__ == "__main__":
             print('\t' + p)
         exit()
 
-    if args.mode == 'train':
+    if args.mode == 'kfold':
+        train(dataset=args.dataset, net=args.net, batch_size=args.batch_size,
+              learning_rate=args.learning_rate, optimizer=args.optimizer,
+              lr_decay_step=args.lr_decay_step, lr_decay_gamma=args.lr_decay_gamma,
+              pretrain=args.pretrain, resume=args.resume, class_agnostic=args.class_agnostic,
+              total_epoch=args.total_epoch, display_interval=args.display_interval,
+              session=args.session, epoch=args.epoch, save_dir=args.save_dir,
+              vis_off=args.vis_off, mGPU=args.mGPU, add_params=add_params,
+              k_folds=args.k_folds)
+    elif args.mode == 'train':
         train(dataset=args.dataset, net=args.net, batch_size=args.batch_size,
               learning_rate=args.learning_rate, optimizer=args.optimizer,
               lr_decay_step=args.lr_decay_step, lr_decay_gamma=args.lr_decay_gamma,
