@@ -2,12 +2,17 @@ name: dl38
 channels:
   - pytorch
   - conda-forge
+  - anaconda
+  - nvidia
   - defaults
 dependencies:
-  - colorama
-  - easydict
-  - pyyaml
-  - matplotlib
-  - numpy
-  - opencv
+  - conda-forge::colorama
+  - conda-forge::easydict
+  - anaconda::pyyaml
+  - conda-forge::matplotlib
+  - anaconda::numpy
+  - conda-forge::opencv
+  - anaconda::scikit-learn
+  - nvidia::torchvision
+  - nvidia::pytorch-cuda=11.8
   - python=3.8.*

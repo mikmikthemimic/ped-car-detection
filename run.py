@@ -9,6 +9,7 @@ from config import cfg
 from script.train import train
 from script.test import test
 from script.detect import detect
+from script.kfold import kfold
 from utils.net_utils import parse_additional_params
 
 
@@ -165,7 +166,7 @@ if __name__ == "__main__":
         exit()
 
     if args.mode == 'kfold':
-        train(dataset=args.dataset, net=args.net, batch_size=args.batch_size,
+        kfold(dataset=args.dataset, net=args.net, batch_size=args.batch_size,
               learning_rate=args.learning_rate, optimizer=args.optimizer,
               lr_decay_step=args.lr_decay_step, lr_decay_gamma=args.lr_decay_gamma,
               pretrain=args.pretrain, resume=args.resume, class_agnostic=args.class_agnostic,
