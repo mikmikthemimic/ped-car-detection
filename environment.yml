@@ -8,10 +8,10 @@ channels:
 dependencies:
   - conda-forge::colorama
   - conda-forge::easydict
-  - anaconda::pyyaml
   - conda-forge::matplotlib
-  - anaconda::numpy
   - conda-forge::opencv
+  - anaconda::pyyaml
+  - anaconda::numpy
   - anaconda::scikit-learn
   - nvidia::torchvision
   - nvidia::pytorch-cuda=11.8
