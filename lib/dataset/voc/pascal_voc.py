@@ -84,6 +84,8 @@ class PascalVoc(ImageDataset):
             y1 = int(round(float(bndbox.find('ymin').text))) - 1
             x2 = int(round(float(bndbox.find('xmax').text))) - 1
             y2 = int(round(float(bndbox.find('ymax').text))) - 1
+            if x1 < 0: x1 = 0
+            if y1 < 0: y1 = 0
             boxes[idx, :] = [x1, y1, x2, y2]
             
             difficult = obj.find('difficult')
@@ -99,7 +101,7 @@ class PascalVoc(ImageDataset):
             overlaps[idx, cls] = 1.0
             areas[idx] = (x2 - x1 + 1) * (y2 - y1 + 1)
             
-        utils.validate_boxes(boxes, width=img_size[1], height=img_size[0])
+        utils.validate_boxes(boxes, id, width=img_size[1], height=img_size[0])
         return {'index': idx,
                 'id': str(id),
                 'path': img_path,
