@@ -205,14 +205,15 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
                 lr_scheduler.step()
 
                 save_path = os.path.join(output_dir, 'frcnn_F{}_S{}_E{}.pth'.format(fold, session, current_epoch))
+                print(faster_rcnn.module().state_dict())
                 checkpoint = {'epoch': current_epoch + 1,
-                            'model': faster_rcnn.module().state_dict() if mGPU else faster_rcnn.state_dict(),
+                            'model': faster_rcnn.state_dict(),
                             'optimizer': optimizer.state_dict()}
                 torch.save(checkpoint, save_path)
 
         save_path = os.path.join(output_dir, 'frcnn_F{}_S{}.pth'.format(fold, session))
         checkpoint = {'fold': fold,
-                    'model': faster_rcnn.module().state_dict() if mGPU else faster_rcnn.state_dict(),
+                    'model': faster_rcnn.state_dict(),
                     'optimizer': optimizer.state_dict()}
         torch.save(checkpoint, save_path)
 
@@ -230,7 +231,7 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
             results[fold] = 100 * correct / total
     
     save_path = os.path.join(output_dir, 'frcnn_S{}.pth'.format(session))
-    checkpoint = { 'model': faster_rcnn.module().state_dict() if mGPU else faster_rcnn.state_dict(),
+    checkpoint = { 'model': faster_rcnn.state_dict(),
                 'optimizer': optimizer.state_dict() }
     torch.save(checkpoint, save_path)
 
