@@ -85,10 +85,14 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
 
         trainloader = torch.utils.data.DataLoader(
                       dataset, 
-                      batch_size=10, sampler=train_subsampler)
+                      batch_size=cfg.TRAIN.BATCH_SIZE,
+                      shuffle=True,
+                      collate_fn=collate_train)
         testloader = torch.utils.data.DataLoader(
-                      dataset,
-                      batch_size=10, sampler=test_subsampler)
+                      dataset, 
+                      batch_size=1,
+                      shuffle=False,
+                      collate_fn=collate_test)
         
         faster_rcnn.init()
         faster_rcnn.apply(reset_weights)
