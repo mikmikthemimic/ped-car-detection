@@ -86,6 +86,8 @@ class PascalVoc(ImageDataset):
             y2 = int(round(float(bndbox.find('ymax').text))) - 1
             if x1 < 0: x1 = 0
             if y1 < 0: y1 = 0
+            if x2 >= 1280: x2 = 1279
+            if y2 >= 720: y2 = 719
             boxes[idx, :] = [x1, y1, x2, y2]
             
             difficult = obj.find('difficult')
