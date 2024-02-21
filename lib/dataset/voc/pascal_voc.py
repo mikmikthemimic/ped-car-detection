@@ -80,10 +80,10 @@ class PascalVoc(ImageDataset):
         for idx, obj in enumerate(objects):
             bndbox = obj.find('bndbox')
             # Start coord is 0
-            x1 = int(bndbox.find('xmin').text) - 1
-            y1 = int(bndbox.find('ymin').text) - 1
-            x2 = int(bndbox.find('xmax').text) - 1
-            y2 = int(bndbox.find('ymax').text) - 1
+            x1 = int(round(float(bndbox.find('xmin').text))) - 1
+            y1 = int(round(float(bndbox.find('ymin').text))) - 1
+            x2 = int(round(float(bndbox.find('xmax').text))) - 1
+            y2 = int(round(float(bndbox.find('ymax').text))) - 1
             boxes[idx, :] = [x1, y1, x2, y2]
             
             difficult = obj.find('difficult')
