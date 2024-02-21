@@ -10,9 +10,9 @@ from dataset.image_dataset import ImageDataset
 from dataset.voc.voc_eval import voc_eval
 
 _CLASSES = ('__background__',  # always index 0
-           'Enforcer',
-           'Pedestrian', 'Pedestrian-Violator',
-           'Vehicle', 'Vehicle-Violator'
+           'enforcer',
+           'pedestrian', 'pedestrian-violator',
+           'vehicle', 'vehicle-violator'
            )
 
 class PascalVoc(ImageDataset):
