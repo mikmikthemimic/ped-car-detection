@@ -205,7 +205,6 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
                 lr_scheduler.step()
 
                 save_path = os.path.join(output_dir, 'frcnn_F{}_S{}_E{}.pth'.format(fold, session, current_epoch))
-                print(faster_rcnn.module().state_dict())
                 checkpoint = {'epoch': current_epoch + 1,
                             'model': faster_rcnn.state_dict(),
                             'optimizer': optimizer.state_dict()}
