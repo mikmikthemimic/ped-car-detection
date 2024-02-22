@@ -86,13 +86,14 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
         trainloader = torch.utils.data.DataLoader(
                       dataset, 
                       batch_size=cfg.TRAIN.BATCH_SIZE,
-                      shuffle=True,
-                      collate_fn=collate_train)
+                      collate_fn=collate_train,
+                      sampler=train_subsampler)
+        
         testloader = torch.utils.data.DataLoader(
                       dataset, 
                       batch_size=1,
-                      shuffle=False,
-                      collate_fn=collate_test)
+                      collate_fn=collate_test,
+                      sampler=test_subsampler)
         
         faster_rcnn.init()
         faster_rcnn.apply(reset_weights)
@@ -215,19 +216,6 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
                     'model': faster_rcnn.state_dict(),
                     'optimizer': optimizer.state_dict()}
         torch.save(checkpoint, save_path)
-
-        correct, total = 0, 0
-        with torch.no_grad():
-            for i, data in enumerate(testloader):
-                inputs, targets = data
-                outputs = faster_rcnn(inputs)
-
-                _, predicted = torch.max(outputs, 1)
-                total += targets.size(0)
-                correct += (predicted == targets).sum().item()
-            
-            print('Accuracy of the network on the test images: %d %%' % (100 * correct / total))
-            results[fold] = 100 * correct / total
     
     save_path = os.path.join(output_dir, 'frcnn_S{}.pth'.format(session))
     checkpoint = { 'model': faster_rcnn.state_dict(),
@@ -237,9 +225,3 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
     if not vis_off:
         plotter.send('save', save_path[:-4])
     print(Back.WHITE + Fore.BLACK + 'Model saved: %s' % (save_path))
-    
-    sum = 0
-    for fold in results:
-        sum += results[fold]
-        print('Fold {} accuracy: {}'.format(fold, results[fold]))
-    print('Average accuracy: {}'.format(sum / len(results.items())))
