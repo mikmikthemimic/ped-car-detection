@@ -25,7 +25,7 @@ def reset_weights(m):
     print(f'Reset trainable parameters of layer = {layer}')
     layer.reset_parameters()
 
-def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
+def kfold(dataset, net, batch_size, learning_rate, param_optimizer, lr_decay_step,
           lr_decay_gamma, pretrain, resume, class_agnostic, total_epoch,
           display_interval, session, epoch, save_dir, vis_off, mGPU, add_params, k_folds):
     device = torch.device('cuda:0') if cfg.CUDA else torch.device('cpu')
@@ -79,13 +79,6 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
     else:
         raise ValueError(Back.RED + 'Network "{}" is not defined!'.format(net))
 
-    if optimizer == 'sgd':
-        optimizer = SGD(params, momentum=cfg.TRAIN.MOMENTUM)
-    elif optimizer == 'adam':
-        optimizer = Adam(params)
-    else:
-        raise ValueError(Back.RED + 'Optimizer "{}" is not defined!'.format(optimizer))
-
     for fold, (train_ids, test_ids) in enumerate(kfold.split(dataset)):
         train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
 
@@ -110,6 +103,13 @@ def kfold(dataset, net, batch_size, learning_rate, optimizer, lr_decay_step,
                     params += [{'params': [value],
                                 'lr':cfg.TRAIN.LEARNING_RATE,
                                 'weight_decay': cfg.TRAIN.WEIGHT_DECAY}]
+        
+        if param_optimizer == 'sgd':
+            optimizer = SGD(params, momentum=cfg.TRAIN.MOMENTUM)
+        elif param_optimizer == 'adam':
+            optimizer = Adam(params)
+        else:
+            raise ValueError(Back.RED + 'Optimizer "{}" is not defined!'.format(param_optimizer))
 
         start_epoch = 1
 
