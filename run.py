@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     if args.mode == 'kfold':
         kfold(dataset=args.dataset, net=args.net, batch_size=args.batch_size,
-              learning_rate=args.learning_rate, optimizer=args.optimizer,
+              learning_rate=args.learning_rate, param_optimizer=args.optimizer,
               lr_decay_step=args.lr_decay_step, lr_decay_gamma=args.lr_decay_gamma,
               pretrain=args.pretrain, resume=args.resume, class_agnostic=args.class_agnostic,
               total_epoch=args.total_epoch, display_interval=args.display_interval,
