@@ -171,15 +171,15 @@ def kfold(dataset, net, batch_size, learning_rate, param_optimizer, lr_decay_ste
                         loss_rcnn_cls = RCNN_loss_cls.mean().item()
                         loss_rcnn_bbox = RCNN_loss_bbox.mean().item()
 
-                        print(Back.WHITE + Fore.BLACK + '[session %d][epoch %2d/%2d][iter %4d/%4d]'
-                            % (session, current_epoch, total_epoch, step, len(trainloader)))
+                        print(Back.WHITE + Fore.BLACK + '[fold %d][epoch %2d/%2d][iter %4d/%4d]'
+                            % (fold, current_epoch, total_epoch, step, len(trainloader)))
                         print('loss: %.4f, learning rate: %.2e, time cost: %f'
                             % (loss_temp, optimizer.param_groups[0]['lr'], end-start))
                         print('rpn_cls: %.4f, rpn_box: %.4f, rcnn_cls: %.4f, rcnn_box %.4f'
                             % (loss_rpn_cls, loss_rpn_bbox, loss_rcnn_cls, loss_rcnn_bbox))
 
                         if not vis_off:
-                            plotter_data = {'session': session,
+                            plotter_data = {'fold': fold,
                                             'current_epoch': current_epoch,
                                             'total_epoch': total_epoch,
                                             'current_iter': step,
@@ -203,12 +203,14 @@ def kfold(dataset, net, batch_size, learning_rate, param_optimizer, lr_decay_ste
                             'model': faster_rcnn.state_dict(),
                             'optimizer': optimizer.state_dict()}
                 torch.save(checkpoint, save_path)
+                print(Back.WHITE + Fore.BLACK + '[Fold %d, Epoch %2d/%2d] Model saved: %s' % (fold, current_epoch, total_epoch, save_path))
 
         save_path = os.path.join(output_dir, 'frcnn_F{}_S{}.pth'.format(fold, session))
         checkpoint = {'fold': fold,
                     'model': faster_rcnn.state_dict(),
                     'optimizer': optimizer.state_dict()}
         torch.save(checkpoint, save_path)
+        print(Back.WHITE + Fore.BLACK + '[Fold %d] Model saved: %s' % (fold, save_path))
     
     save_path = os.path.join(output_dir, 'frcnn_S{}.pth'.format(session))
     checkpoint = { 'model': faster_rcnn.state_dict(),
